@@ -4,6 +4,16 @@ This is the boilerplate code for the Basic Node and Express Challenges. Instruct
 
 # Notes
 
+## Request and Response objects
+Express has two main objects to work with: `req` and `res`.
+### Request (req)
+The req object represents the HTTP request and has properties for the request query string, parameters, body, HTTP headers, and so on.
+The properties of the `req` object can be found [here](https://expressjs.com/en/api.html#req)
+
+### Response (res)
+The res object represents the HTTP response that an Express app sends when it gets an HTTP request.
+The properties of the `res` object can be found [here](https://expressjs.com/en/5x/api.html#res)
+
 ## serving in Express
 Express routes use the following template:
 `app.METHOD(PATH, HANDLER)` where:
@@ -30,3 +40,14 @@ REST stands for REpresentational State Transfer. A REST API allows for data exch
 - `OPTIONS` describes the communication options for the target resource
 - `TRACE` performs a message loop-back test along the path to the target resource
 - `PATCH` applies partial modifications to a resource
+
+## middleware
+Middleware functions take 3 arguments, the request object, the response object and the next function in the application's request-response cycle. Meaning the functions execute code that can have side effects on the app, like adding information to the request or response object. They can also end the cycle by sending a response when some condition is met. If they don't send the response when done, they start the execution of the next function in the stack, which is triggered by the 3rd argument `next()`.
+```javascript
+function(req, res, next) {
+  console.log("I'm a middleware...");
+  next();
+}
+```
+the above middleware function will print the string `I'm a middleware...` and then executes the next function in the stack, when a request matches the route.
+You can specify when the middleware has to be used: `app.use(middlewareFunction())` for execution at the root level, `app.METHOD(middlewareFunction())` if the function should only be executed for a specific method (GET, POST, DELETE etc.).
